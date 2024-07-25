@@ -90,7 +90,7 @@ impl Net {
         iface.update_ip_addrs(|ip_addrs| {
             ip_addrs.push(ip_addr).unwrap();
         });
-        /*for gateway in config.gateway {
+        for gateway in config.gateway {
             match gateway {
                 IpAddress::Ipv4(v4) => {
                     iface.routes_mut().add_default_ipv4_route(v4).unwrap();
@@ -98,7 +98,7 @@ impl Net {
                 #[allow(unreachable_patterns)]
                 _ => panic!("Unsupported address"),
             };
-        }*/
+        }
 
         let stopper = Arc::new(Notify::new());
         let (reactor, fut) = Reactor::new(
