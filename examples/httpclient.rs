@@ -42,20 +42,10 @@ fn main() {
         ip_addrs
             .push(IpCidr::new(IpAddress::v4(192, 168, 69, 1), 24))
             .unwrap();
-        ip_addrs
-            .push(IpCidr::new(IpAddress::v6(0xfdaa, 0, 0, 0, 0, 0, 0, 1), 64))
-            .unwrap();
-        ip_addrs
-            .push(IpCidr::new(IpAddress::v6(0xfe80, 0, 0, 0, 0, 0, 0, 1), 64))
-            .unwrap();
     });
     iface
         .routes_mut()
         .add_default_ipv4_route(Ipv4Address::new(192, 168, 69, 100))
-        .unwrap();
-    iface
-        .routes_mut()
-        .add_default_ipv6_route(Ipv6Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 0x100))
         .unwrap();
 
     // Create sockets
@@ -85,7 +75,7 @@ fn main() {
                 debug!("connecting");
                 let local_port = 49152 + rand::random::<u16>() % 16384;
                 socket
-                    .connect(cx, (address, url.port().unwrap_or(80)), local_port)
+                    .connect(cx, (address, url.port().unwrap_or(8000)), local_port)
                     .unwrap();
                 State::Request
             }
