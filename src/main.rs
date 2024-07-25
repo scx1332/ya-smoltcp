@@ -136,7 +136,7 @@ async fn async_main(opt: Opt) -> Result<()> {
         dns_parser::QueryClass::IN,
     );
     let query = query_builder.build().unwrap();
-    udp.send_to(&query, "114.114.114.114:53".parse()?).await?;
+    udp.send_to(&query, "8.8.8.8:53".parse()?).await?;
     let mut answer = [0u8; 1024];
     let (size, _) = udp.recv_from(&mut answer).await?;
     let packet = dns_parser::Packet::parse(&answer[..size])?;
