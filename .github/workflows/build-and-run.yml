@@ -11,6 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup interface
+        run: |
+          sudo ip tuntap add name tap0 mode tap user $USER
+          sudo ip link set tap0 up
+          sudo ip addr add 192.168.69.100/24 dev tap0
+          ifconfig
+
       - name: Dependencies
         run: |
           #sudo apt-get update
