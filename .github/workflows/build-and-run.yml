@@ -60,6 +60,8 @@ jobs:
           RUST_BACKTRACE: 1
           RUST_LOG: debug
 
-      - name: Show tcpdump
-        run: |
-          cat tcpdump.log
+      - name: Upload tcpdump
+        uses: actions/upload-artifact@v2
+        with:
+          name: tcpdump.log
+          path: tcpdump.log
