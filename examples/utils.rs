@@ -1,9 +1,7 @@
 #![allow(dead_code)]
 
-#[cfg(feature = "log")]
 use env_logger::Builder;
 use getopts::{Matches, Options};
-#[cfg(feature = "log")]
 use log::{trace, Level, LevelFilter};
 use std::env;
 use std::fs::File;
