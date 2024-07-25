@@ -1,4 +1,4 @@
-name: Build and run
+name: Build and run tun
 
 on:
   push:
@@ -18,19 +18,19 @@ jobs:
           default_route=$(ip route show default | awk '/default/ {print $3}')
           echo "Default route: $default_route"
           
-          sudo ip tuntap add name tap0 mode tap user $USER
-          sudo ip link set tap0 up
-          sudo ip addr add 192.168.69.100/24 dev tap0
+          sudo ip tuntap add name tun0 mode tun user $USER
+          sudo ip link set tun0 up
+          sudo ip addr add 192.168.69.100/24 dev tun0
 
           sudo iptables -t nat -A POSTROUTING -s 192.168.69.0/24 -j MASQUERADE
           sudo sysctl net.ipv4.ip_forward=1
           
           # Some distros have a default policy of DROP. This allows the traffic.
-          sudo iptables -A FORWARD -i tap0 -s 192.168.69.0/24 -j ACCEPT
-          sudo iptables -A FORWARD -o tap0 -d 192.168.69.0/24 -j ACCEPT
+          sudo iptables -A FORWARD -i tun0 -s 192.168.69.0/24 -j ACCEPT
+          sudo iptables -A FORWARD -o tun0 -d 192.168.69.0/24 -j ACCEPT
           ifconfig
-          ip link show tap0
-          ip addr show tap0
+          ip link show tun0
+          ip addr show tun0
 
       - name: Dependencies
         run: |
@@ -51,13 +51,13 @@ jobs:
 
       - name: Start tcpdump
         run: |
-          sudo tcpdump -U -i tap0 -w tcpdump.log &
+          sudo tcpdump -U -i tun0 -w tcpdump.log &
 
       - name: Run
         run: |
           set -x 
           ip_address=$(hostname -I | awk '{print $1}')
-          cargo run --example httpclient -- --tap tap0 ${ip_address} http://${ip_address}:8000/
+          cargo run --example httpclient -- --tun tun0 ${ip_address} http://${ip_address}:8000/
         env:
           RUST_BACKTRACE: 1
           RUST_LOG: debug
