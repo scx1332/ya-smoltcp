@@ -30,4 +30,7 @@ jobs:
         run: |
           cargo build
           sudo mv target/debug/ya-smoltcp /usr/bin/ya-smoltcp
-          
+
+      - name: Run
+        run: |
+          sudo ya-smoltcp tap0
