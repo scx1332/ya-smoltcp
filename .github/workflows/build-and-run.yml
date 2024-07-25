@@ -51,4 +51,7 @@ jobs:
           default_route=$(ip route show default | awk '/default/ {print $3}')
           echo "Default route: $default_route"
           
-          sudo ya-smoltcp tap0 --gateway $default_route
+          sudo ya-smoltcp tap0 --gateway "$default_route"
+        env:
+          RUST_BACKTRACE: 1
+          RUST_LOG: debug
