@@ -52,7 +52,8 @@ jobs:
       - name: Run
         run: |
           set -x 
-          cargo run --example httpclient -- --tap tap0 127.0.0.1 http://127.0.0.1:8000/
+          ip_address=$(hostname -I | awk '{print $1}')
+          cargo run --example httpclient -- --tap tap0 ip_address http://ip_address:8000/
         env:
           RUST_BACKTRACE: 1
           RUST_LOG: debug
