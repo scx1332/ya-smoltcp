@@ -7,6 +7,7 @@ use smoltcp::{
     phy::DeviceCapabilities,
     wire::{EthernetAddress, IpAddress, IpCidr},
 };
+use std::os::fd::AsRawFd;
 use smoltcp::phy::{Medium, TunTapInterface};
 use tokio::io::{copy, split, AsyncReadExt, AsyncWriteExt};
 use tokio_smoltcp::{device::AsyncDevice, smoltcp::iface, Net, NetConfig};
