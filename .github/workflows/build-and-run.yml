@@ -55,6 +55,7 @@ jobs:
           sudo tcpdump -i tap0 -n -s 65535 -w tcpdump.log &
           ip_address=$(hostname -I | awk '{print $1}')
           cargo run --example httpclient -- --tap tap0 $ip_address http://$ip_address:8000/
+          sudo killall tcpdump
         env:
           RUST_BACKTRACE: 1
           RUST_LOG: debug
