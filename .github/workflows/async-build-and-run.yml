@@ -63,11 +63,13 @@ jobs:
           RUST_LOG: debug
 
       - name: Stop tcpdump
+        if: always()
         run: |
           sleep 5
           sudo kill $(pidof tcpdump)
 
       - name: Upload tcpdump
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: tcpdump.log
