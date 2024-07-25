@@ -21,7 +21,6 @@ struct Opt {
     gateway: String,
 }
 
-#[cfg(unix)]
 fn get_by_device(device: Device) -> Result<impl AsyncDevice> {
     use std::io;
     use tokio_smoltcp::device::AsyncCapture;
@@ -42,6 +41,12 @@ fn get_by_device(device: Device) -> Result<impl AsyncDevice> {
         }
     }
     let mut caps = DeviceCapabilities::default();
+    match caps.medium {
+        smoltcp::phy::Medium::Ethernet => {
+            println!("Detected medium: Ethernet");
+        }
+        _ => return Err(anyhow!("Unsupported medium")),
+    }
     caps.max_burst_size = Some(100);
     caps.max_transmission_unit = 1500;
 
@@ -62,48 +67,6 @@ fn get_by_device(device: Device) -> Result<impl AsyncDevice> {
         .context("Failed to create async capture")?)
 }
 
-#[cfg(windows)]
-fn get_by_device(device: Device) -> Result<impl AsyncDevice> {
-    use tokio::sync::mpsc::{Receiver, Sender};
-    use tokio_smoltcp::device::ChannelCapture;
-    let mut caps = DeviceCapabilities::default();
-    caps.max_burst_size = Some(100);
-    caps.max_transmission_unit = 1500;
-
-    let mut cap = Capture::from_device(device.clone())
-        .context("Failed to capture device")?
-        .promisc(true)
-        .immediate_mode(true)
-        .timeout(5)
-        .open()
-        .context("Failed to open device")?;
-    let mut send = Capture::from_device(device)
-        .context("Failed to capture device")?
-        .promisc(true)
-        .immediate_mode(true)
-        .timeout(5)
-        .open()
-        .context("Failed to open device")?;
-
-    let recv = move |tx: Sender<std::io::Result<Vec<u8>>>| loop {
-        let p = match cap.next_packet().map(|p| p.to_vec()) {
-            Ok(p) => p,
-            Err(pcap::Error::TimeoutExpired) => continue,
-            Err(e) => {
-                eprintln!("Error: {:?}", e);
-                break;
-            }
-        };
-        tx.blocking_send(Ok(p)).unwrap();
-    };
-    let send = move |mut rx: Receiver<Vec<u8>>| {
-        while let Some(pkt) = rx.blocking_recv() {
-            send.sendpacket(pkt).unwrap();
-        }
-    };
-    let capture = ChannelCapture::new(recv, send, caps);
-    Ok(capture)
-}
 
 async fn async_main(opt: Opt) -> Result<()> {
     //print all devices
