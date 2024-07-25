@@ -55,7 +55,6 @@ where
         .init();
 }
 
-#[cfg(feature = "log")]
 pub fn setup_logging(filter: &str) {
     setup_logging_with_clock(filter, Instant::now)
 }
