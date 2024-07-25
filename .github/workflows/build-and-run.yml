@@ -1,0 +1,24 @@
+name: Build and run
+
+on:
+  push:
+    branches:
+      - main
+  pull:
+    branches:
+      - main
+
+jobs:
+  build-and-run:
+    name: Build and run
+
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          cargo build
+          sudo mv target/debug/ya-smoltcp /usr/bin/ya-smoltcp
+          
