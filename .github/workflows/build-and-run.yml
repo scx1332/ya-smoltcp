@@ -45,13 +45,14 @@ jobs:
           cargo build
           sudo mv target/debug/ya-smoltcp /usr/bin/ya-smoltcp
 
+      - name: Spawn file server
+        run: |
+          python3 -m http.server 8000 &
+
       - name: Run
         run: |
           set -x 
-          default_route=$(ip route show default | awk '/default/ {print $3}')
-          echo "Default route: $default_route"
-          
-          cargo run --example httpclient -- --tap tap0 5.9.155.174 http://5.9.155.174:8000/
+          cargo run --example httpclient -- --tap tap0 127.0.0.1 http://127.0.0.1:8000/
         env:
           RUST_BACKTRACE: 1
           RUST_LOG: debug
