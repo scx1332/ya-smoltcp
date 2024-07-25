@@ -9,7 +9,7 @@ version = "0.1.0"
 edition = "2021"
 
 [workspace.dependencies]
-smoltcp = { version = "^0.11", default-features = false, features = ["phy-tuntap_interface", "log", ""std", "async", "socket-tcp", "socket-udp", "socket-raw", "medium-ethernet", "medium-ip", "proto-ipv4", "proto-ipv6", "socket-raw"] }
+smoltcp = { version = "^0.11", default-features = false, features = ["phy-tuntap_interface", "log", "std", "async", "socket-tcp", "socket-udp", "socket-raw", "medium-ethernet", "medium-ip", "proto-ipv4", "proto-ipv6", "socket-raw"] }
 
 [dependencies]
 anyhow = "1.0.86"
