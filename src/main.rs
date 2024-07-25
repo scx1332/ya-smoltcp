@@ -54,9 +54,9 @@ fn get_by_device(device: Device) -> Result<impl AsyncDevice> {
 
 
     let device = TunTapInterface::new("tap0", Medium::Ethernet).context("Failed to create tun/tap interface")?;
-    let fd = device.as_raw_fd();
+    //let fd = device.as_raw_fd();
     Ok(AsyncCapture::new(
-        fd,
+        device,
         |d| {
             let r = d.next_packet().map_err(map_err).map(|p| p.to_vec());
             // eprintln!("recv {:?}", r);
