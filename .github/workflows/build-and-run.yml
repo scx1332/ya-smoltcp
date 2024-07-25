@@ -51,7 +51,7 @@ jobs:
 
       - name: Start tcpdump
         run: |
-          sudo tcpdump -i tap0 -w tcpdump.log &
+          sudo tcpdump -i eth0 -w tcpdump.log &
 
       - name: Run
         run: |
