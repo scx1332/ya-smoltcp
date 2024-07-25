@@ -47,6 +47,7 @@ jobs:
 
       - name: Run
         run: |
+          set -x 
           default_route=$(ip route show default | awk '/default/ {print $3}')
           echo "Default route: $default_route"
           
