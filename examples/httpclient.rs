@@ -34,7 +34,6 @@ fn main() {
             Config::new(EthernetAddress([0x02, 0x00, 0x00, 0x00, 0x00, 0x01]).into())
         }
         Medium::Ip => Config::new(smoltcp::wire::HardwareAddress::Ip),
-        Medium::Ieee802154 => todo!(),
     };
     config.random_seed = rand::random();
 
