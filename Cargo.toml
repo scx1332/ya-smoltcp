@@ -1,0 +1,25 @@
+[workspace]
+members = [
+    "crates/tokio-smoltcp",
+]
+
+[package]
+name = "ya-smoltcp"
+version = "0.1.0"
+edition = "2021"
+
+[workspace.dependencies]
+smoltcp = { version = "^0.11", default-features = false, features = ["std", "async", "socket-tcp", "socket-udp", "socket-raw", "medium-ethernet", "medium-ip", "proto-ipv4", "proto-ipv6", "socket-raw"] }
+
+[dependencies]
+anyhow = "1.0.86"
+env_logger = "0.11.4"
+clap = { version = "4.5", features = ["derive"] }
+dns-parser = "0.8"
+getopts = "0.2.21"
+log = "0.4.22"
+pcap = "2.0.0"
+rand = "0.9.0-alpha.1"
+smoltcp = { workspace = true }
+tokio = { version = "1.39.1", features = ["time", "rt-multi-thread", "macros", "sync", "io-util"] }
+tokio-smoltcp = { path = "crates/tokio-smoltcp" }
