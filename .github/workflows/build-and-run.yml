@@ -22,12 +22,12 @@ jobs:
           sudo ip link set tap0 up
           sudo ip addr add 192.168.69.100/24 dev tap0
 
-          #sudo iptables -t nat -A POSTROUTING -s 192.168.69.0/24 -j MASQUERADE
-          #sudo sysctl net.ipv4.ip_forward=1
+          sudo iptables -t nat -A POSTROUTING -s 192.168.69.0/24 -j MASQUERADE
+          sudo sysctl net.ipv4.ip_forward=1
           
           # Some distros have a default policy of DROP. This allows the traffic.
-          #sudo iptables -A FORWARD -i tap0 -s 192.168.69.0/24 -j ACCEPT
-          #sudo iptables -A FORWARD -o tap0 -d 192.168.69.0/24 -j ACCEPT
+          sudo iptables -A FORWARD -i tap0 -s 192.168.69.0/24 -j ACCEPT
+          sudo iptables -A FORWARD -o tap0 -d 192.168.69.0/24 -j ACCEPT
           ifconfig
           ip link show tap0
           ip addr show tap0
@@ -54,14 +54,14 @@ jobs:
           set -x 
           sudo tcpdump -i tap0 -n -s 65535 -w tcpdump.log &
           ip_address=$(hostname -I | awk '{print $1}')
-          cargo run --example httpclient -- --tap tap0 $ip_address http://$ip_address:8000/
+          cargo run --example httpclient -- --tap tap0 5.9.155.174 http://5.9.155.174:8000/
           sudo killall tcpdump
         env:
           RUST_BACKTRACE: 1
           RUST_LOG: debug
 
       - name: Upload tcpdump
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: tcpdump.log
           path: tcpdump.log
