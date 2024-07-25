@@ -25,6 +25,7 @@ fn main() {
     let fd = device.as_raw_fd();
     let mut device =
         utils::parse_middleware_options(&mut matches, device, /*loopback=*/ false);
+
     let address = IpAddress::from_str(&matches.free[0]).expect("invalid address format");
     let url = Url::parse(&matches.free[1]).expect("invalid url format");
 

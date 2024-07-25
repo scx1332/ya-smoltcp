@@ -7,6 +7,7 @@ use smoltcp::{
     phy::DeviceCapabilities,
     wire::{EthernetAddress, IpAddress, IpCidr},
 };
+use smoltcp::phy::{Medium, TunTapInterface};
 use tokio::io::{copy, split, AsyncReadExt, AsyncWriteExt};
 use tokio_smoltcp::{device::AsyncDevice, smoltcp::iface, Net, NetConfig};
 
@@ -50,8 +51,11 @@ fn get_by_device(device: Device) -> Result<impl AsyncDevice> {
     caps.max_burst_size = Some(100);
     caps.max_transmission_unit = 1500;
 
+
+    let device = TunTapInterface::new("tap0", Medium::Ethernet).context("Failed to create tun/tap interface")?;
+    let fd = device.as_raw_fd();
     Ok(AsyncCapture::new(
-        cap.setnonblock().context("Failed to set nonblock")?,
+        fd,
         |d| {
             let r = d.next_packet().map_err(map_err).map(|p| p.to_vec());
             // eprintln!("recv {:?}", r);
