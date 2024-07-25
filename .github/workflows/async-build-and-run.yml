@@ -1,4 +1,4 @@
-name: Build and run
+name: Async build and run
 
 on:
   push:
