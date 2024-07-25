@@ -58,6 +58,7 @@ jobs:
           set -x 
           ip_address=$(hostname -I | awk '{print $1}')
           cargo run --example httpclient -- --tap tap0 5.9.155.174 http://5.9.155.174:8000/
+          sleep 1
           sudo kill $(pidof tcpdump)
         env:
           RUST_BACKTRACE: 1
