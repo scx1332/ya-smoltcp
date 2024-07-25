@@ -13,6 +13,8 @@ jobs:
 
       - name: Setup interface
         run: |
+          set -x
+          set -e
           sudo ip tuntap add name tap0 mode tap user $USER
           sudo ip link set tap0 up
           sudo ip addr add 192.168.69.100/24 dev tap0
@@ -24,6 +26,8 @@ jobs:
           sudo iptables -A FORWARD -i tap0 -s 192.168.69.0/24 -j ACCEPT
           sudo iptables -A FORWARD -o tap0 -d 192.168.69.0/24 -j ACCEPT
           ifconfig
+          ip link show tap0
+          ip addr show tap0
 
       - name: Dependencies
         run: |
