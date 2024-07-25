@@ -6,9 +6,8 @@ on:
 jobs:
   build-and-run:
     name: Build and run
-
+    runs-on: ubuntu-latest
     timeout-minutes: 10
-
     steps:
       - uses: actions/checkout@v4
 
