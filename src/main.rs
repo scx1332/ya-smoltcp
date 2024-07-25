@@ -17,7 +17,7 @@ struct Opt {
     ethernet_addr: String,
     #[clap(short, long, default_value = "192.168.69.1/24")]
     ip_addr: String,
-    #[clap(short, long, default_value = "192.168.69.100")]
+    #[clap(short, long, default_value = "192.168.69.0")]
     gateway: String,
 }
 
