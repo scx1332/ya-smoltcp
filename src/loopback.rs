@@ -27,13 +27,6 @@ impl Device for Loopback {
     type RxToken<'a> = RxToken;
     type TxToken<'a> = TxToken<'a>;
 
-    fn capabilities(&self) -> DeviceCapabilities {
-        let mut dev = DeviceCapabilities::default();
-        dev.max_transmission_unit = 65535;
-        dev.medium = self.medium;
-        dev
-    }
-
     fn receive(&mut self, _timestamp: Instant) -> Option<(Self::RxToken<'_>, Self::TxToken<'_>)> {
         self.queue.pop_front().map(move |buffer| {
             let rx = RxToken { buffer };
@@ -48,6 +41,13 @@ impl Device for Loopback {
         Some(TxToken {
             queue: &mut self.queue,
         })
+    }
+
+    fn capabilities(&self) -> DeviceCapabilities {
+        let mut dev = DeviceCapabilities::default();
+        dev.max_transmission_unit = 65535;
+        dev.medium = self.medium;
+        dev
     }
 }
 
