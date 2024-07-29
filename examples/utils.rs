@@ -10,11 +10,9 @@ use std::process;
 use std::str::{self, FromStr};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use smoltcp::phy::TunTapInterface;
-use smoltcp::phy::{Device, FaultInjector, Medium, Tracer};
-use smoltcp::phy::{PcapMode, PcapWriter};
+use smoltcp::phy::{Device, FaultInjector, PcapWriter, Tracer};
 use smoltcp::time::{Duration, Instant};
-
+use smoltcp::phy::PcapMode;
 pub fn setup_logging_with_clock<F>(filter: &str, since_startup: F)
 where
     F: Fn() -> Instant + Send + Sync + 'static,
@@ -91,15 +89,6 @@ pub fn add_tuntap_options(opts: &mut Options, _free: &mut [&str]) {
     opts.optopt("", "tap", "TAP interface to use", "tap0");
 }
 
-pub fn parse_tuntap_options(matches: &mut Matches) -> TunTapInterface {
-    let tun = matches.opt_str("tun");
-    let tap = matches.opt_str("tap");
-    match (tun, tap) {
-        (Some(tun), None) => TunTapInterface::new(&tun, Medium::Ip).unwrap(),
-        (None, Some(tap)) => TunTapInterface::new(&tap, Medium::Ethernet).unwrap(),
-        _ => panic!("You must specify exactly one of --tun or --tap"),
-    }
-}
 
 pub fn add_middleware_options(opts: &mut Options, _free: &mut [&str]) {
     opts.optopt("", "pcap", "Write a packet capture file", "FILE");

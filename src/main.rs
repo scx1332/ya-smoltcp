@@ -1,3 +1,5 @@
+mod utils;
+
 use std::env;
 use anyhow::{anyhow, Context, Result};
 use clap::Parser;
@@ -58,7 +60,7 @@ fn get_by_device(device: Device) -> Result<impl AsyncDevice> {
     Ok(AsyncCapture::new(
         device,
         |d| {
-            let r = d.next_packet().map_err(map_err).map(|p| p.to_vec());
+            let r = d.receive().map_err(map_err).map(|p| p.to_vec());
             // eprintln!("recv {:?}", r);
             r
         },
